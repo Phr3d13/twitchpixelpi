@@ -59,6 +59,10 @@ NEO9 = [
     [r"!newkitt", "led"]
 ]
 
+NEO10 = [
+    [r"!ice", "led"]
+]
+
 MATRIX01 = [
     [r"!bombjack", "led"]
 ]
@@ -70,9 +74,12 @@ MATRIX02 = [
 MATRIX03 = [
     [r"!digdug", "led"]
 ]
+
 MATRIX04 = [
     [r"!link", "led"]
 ]
+
 MATRIX05 = [
     [r"!mario", "led"]
 ]
+

@@ -17,7 +17,7 @@ if __name__ == '__main2__':
         strip.begin()
 
         print ('Press Ctrl-C to quit.')
-		
+
 def neo_loop1():
     #Process arguments
     opt_parse()
@@ -27,7 +27,7 @@ def neo_loop1():
     strip.begin()
     print("Calling:  Cylon(strip, 255, 0, 0, 3, .1, .5)")
     for i in range (5):
-        Cylon(strip, (random.randrange(0, 255)), (random.randrange(0, 255)), (random.randrange(0, 255)), 7, .05, .01)   
+        Cylon(strip, (random.randrange(0, 255)), (random.randrange(0, 255)), (random.randrange(0, 255)), 7, .05, .01)
 
 def neo_loop2():
     #Process arguments
@@ -37,8 +37,8 @@ def neo_loop2():
     #Intialize the library (must be called once before other functions).
     strip.begin()
     print("Calling:  TheaterChaseRainbow(strip, .1)")
-    TheaterChaseRainbow(strip, .1) 
-    
+    TheaterChaseRainbow(strip, .1)
+
 def blank():
     #Process arguments
     opt_parse()
@@ -59,7 +59,7 @@ def neo_loop3():
     strip.begin()
     t_end = time.time() + 60 * 1
     print("Calling:  Strobe(strip, 255, 255, 255, 5, .25, 3)")
-    Strobe(strip, 200, 200, 200, 20, .15, 3)  
+    Strobe(strip, 200, 200, 200, 20, .15, 3)
     print("Calling:  Blank(strip)")
     Blank(strip)
 
@@ -73,7 +73,7 @@ def neo_loop4():
     print("Calling:  RunningLights(strip, 255, 255, 255, .25)")
     RunningLights(strip, (random.randrange(0, 125, 15)), (random.randrange(0, 125, 15)), (random.randrange(0, 125, 15)), .1)
     Blank(strip)
-    
+
 def neo_loop5():
     #Process arguments
     opt_parse()
@@ -85,7 +85,7 @@ def neo_loop5():
     print("Calling:  Cops(strip, 5, .5, 3)")
     Cops(strip, 5, .5, 3)
     Blank(strip)
-    
+
 def neo_loop6():
     #Process arguments
     opt_parse()
@@ -96,9 +96,9 @@ def neo_loop6():
     strip.begin()
     print("Calling:  Fire(strip, Heat, 75, 150, .015) #This looks a lot better looped...")
     for i in range (300):
-        Fire(strip, Heat, 75, 150, .015) 
+        Fire(strip, Heat, 75, 150, .015)
     Blank(strip)
-    
+
 def neo_loop7():
     #Process arguments
     opt_parse()
@@ -109,7 +109,7 @@ def neo_loop7():
     print("Calling:  MorseCode(strip, 255, 255, 255, 'SOS. This is a test.', .15)")
     MorseCode(strip, 255, 255, 255, 'Phr3d13', .15)
     Blank(strip)
-    
+
 def neo_loop8():
     #Process arguments
     opt_parse()
@@ -121,7 +121,7 @@ def neo_loop8():
     for i in range (30):
         SnowSparkle(strip, 10, 10, 10, .1, random.uniform(0, .5))
     Blank(strip)
-    
+
 def neo_loop9():
     #Process arguments
     opt_parse()
@@ -134,67 +134,31 @@ def neo_loop9():
     NewKitt(strip, random.randint(0, 150), random.randint(0, 150), random.randint(0, 150), 8, .1, .1)
     Blank(strip)
 
-def neo_progmem_BombJack():
+def neo_loop10():
     #Process arguments
     opt_parse()
     #Create NeoPixel object with appropriate configuration.
-    strip = Adafruit_NeoPixel(MATRIX_COUNT, MATRIX_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, MATRIX_BRIGHTNESS, MATRIX_CHANNEL, LED_STRIP)
-    #Intialize the library (must be called once before other functions).
+    strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL, LED_STRIP)
+    #strip = Adafruit_NeoPixel(MATRIX_COUNT, MATRIX_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, MATRIX_CHANNEL, LED_STRIP)
+	#Intialize the library (must be called once before other functions).
     strip.begin()
-    print("Calling:  CharAnimation(BombJack)")
-    for i in range (3):
-        CharAnimation(strip, BombJack)
+    print("Calling:  Ice(strip, Freeze, 75, 150, .015) #This looks a lot better looped...")
+    for i in range (300):
+        Ice(strip, Freeze, 75, 150, .015)
     Blank(strip)
 
-def neo_progmem_Qbert():
+def neo_progmem_run(GameName, loops=3, sleep=0.5):
     #Process arguments
     opt_parse()
     #Create NeoPixel object with appropriate configuration.
     strip = Adafruit_NeoPixel(MATRIX_COUNT, MATRIX_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, MATRIX_BRIGHTNESS, MATRIX_CHANNEL, LED_STRIP)
     #Intialize the library (must be called once before other functions).
     strip.begin()
-    print("Calling:  CharAnimation(Qbert)")
-    for i in range (3):
-	    CharAnimation(strip, Qbert)
+    print("Calling:  CharAnimation(",GameName,",",loops,", ",sleep,")")
+    CharAnimation(strip, GameName, loops, sleep)
     Blank(strip)
 
-def neo_progmem_DigDug():
-    #Process arguments
-    opt_parse()
-    #Create NeoPixel object with appropriate configuration.
-    strip = Adafruit_NeoPixel(MATRIX_COUNT, MATRIX_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, MATRIX_BRIGHTNESS, MATRIX_CHANNEL, LED_STRIP)
-    #Intialize the library (must be called once before other functions).
-    strip.begin()
-    print("Calling:  CharAnimation(DigDug)")
-    for i in range (3):
-	    CharAnimation(strip, DigDug)
-    Blank(strip)
-
-def neo_progmem_Link():
-    #Process arguments
-    opt_parse()
-    #Create NeoPixel object with appropriate configuration.
-    strip = Adafruit_NeoPixel(MATRIX_COUNT, MATRIX_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, MATRIX_BRIGHTNESS, MATRIX_CHANNEL, LED_STRIP)
-    #Intialize the library (must be called once before other functions).
-    strip.begin()
-    print("Calling:  CharAnimation(Link)")
-    for i in range (3):
-	    CharAnimation(strip, Link)
-    Blank(strip)
-	
-def neo_progmem_Mario():
-    #Process arguments
-    opt_parse()
-    #Create NeoPixel object with appropriate configuration.
-    strip = Adafruit_NeoPixel(MATRIX_COUNT, MATRIX_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, MATRIX_BRIGHTNESS, MATRIX_CHANNEL, LED_STRIP)
-    #Intialize the library (must be called once before other functions).
-    strip.begin()
-    print("Calling:  CharAnimation(Mario)")
-    for i in range (3):
-	    CharAnimation3f(strip, Mario)
-    Blank(strip)	
-
-"""       
+"""
 while True:
             print("Calling:  FadeRGB(strip)")
             FadeRGB(strip)

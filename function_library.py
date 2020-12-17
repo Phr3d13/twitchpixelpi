@@ -44,40 +44,15 @@ def SetAll(strip, color):
         strip.setPixelColor(i, color)
 
 # Call progmem character animations by calling DigDug, Qbert, or BombJack
-def CharAnimation(strip, gamename):
-    firstframe = play(gamename, 0)
-    secondframe = play(gamename, 1)
-
-    for i in range(256):
-        strip.setPixelColorRGB(i, firstframe[i][0], firstframe[i][1], firstframe[i][2])
-    strip.show()
-    time.sleep(0.5)
-    for f in range(256):
-        strip.setPixelColorRGB(f, secondframe[f][0], secondframe[f][1], secondframe[f][2])
-    strip.show()
-    time.sleep(0.5)
-
-def CharAnimation3f(strip, gamename):
-    firstframe = play(gamename, 0)
-    secondframe = play(gamename, 1)
-    thirdframe = play(gamename, 2)
-
-    for i in range(256):
-        strip.setPixelColorRGB(i, firstframe[i][0], firstframe[i][1], firstframe[i][2])
-    strip.show()
-    time.sleep(0.5)
-    for f in range(256):
-        strip.setPixelColorRGB(f, secondframe[f][0], secondframe[f][1], secondframe[f][2])
-    strip.show()
-    time.sleep(0.5)
-    for g in range(256):
-        strip.setPixelColorRGB(g, thirdframe[g][0], thirdframe[g][1], thirdframe[g][2])
-    strip.show()
-    time.sleep(0.5)
-    for h in range(256):
-        strip.setPixelColorRGB(h, secondframe[h][0], secondframe[h][1], secondframe[h][2])
-    strip.show()
-    time.sleep(0.5)
+def CharAnimation(strip, gamename, loops=3, sleep=0.5):
+    frames = play(gamename)
+    sequence = Sequences[gamename]
+    for l in range(loops):
+        for i in range(len(sequence)):
+            for j in range(256):
+                strip.setPixelColorRGB(j, frames[sequence[i]][j][0], frames[sequence[i]][j][1], frames[sequence[i]][j][2])
+            strip.show()
+            time.sleep(sleep)
 
 def FadeRGB(strip):
     for i in range(0, 3):
@@ -174,9 +149,9 @@ def Sparkle(strip, red, green, blue, SpeedDelay):
     strip.show()
     time.sleep(SpeedDelay)
     strip.setPixelColor(pixel, Color(0, 0, 0))
-    
+
 def SnowSparkle(strip, red, green, blue, SparkleDelay, SpeedDelay):
-    SetAll(strip, Color(red, green, blue))    
+    SetAll(strip, Color(red, green, blue))
     pixel=random.randrange(0, LED_COUNT)
     strip.setPixelColor(pixel, Color(255, 255, 255))
     strip.show()
@@ -184,7 +159,7 @@ def SnowSparkle(strip, red, green, blue, SparkleDelay, SpeedDelay):
     strip.setPixelColor(pixel, Color(red, green, blue))
     strip.show()
     time.sleep(SpeedDelay)
-    
+
 def RunningLights(strip, red, green, blue, WaveDelay):
     Position=0
     for i in range (0, (LED_COUNT * 2)):
@@ -225,7 +200,7 @@ def Wheel(WheelPosition):
 	else:
 		WheelPosition -= 170
 		return Color(0, WheelPosition * 3, 255 - WheelPosition * 3)
-	    
+
 def Rainbow(strip, SpeedDelay):
     for i in range(0, 256):
         for j in range(0, LED_COUNT):
@@ -241,7 +216,7 @@ def RainbowCycle(strip, Iterations, SpeedDelay):
     time.sleep(SpeedDelay)
     SetAll(strip, Color(0, 0, 0))
     strip.show()
-    
+
 def ColorChase(strip, red, green, blue, SpeedDelay):
 	for i in range(LED_COUNT):
 		strip.setPixelColor(i, Color(red, green, blue))
@@ -423,6 +398,49 @@ def SetPixelHeatColor(strip, Pixel, Temperature):
         strip.setPixelColor(Pixel, Color(255, HeatRamp, 0))
     else:
         strip.setPixelColor(Pixel, Color(HeatRamp, 0, 0))
+		
+#The Freeze array needs to be declaired globally.  You can put it in the main section (but not in the While loop), but not in the Ice function...
+Freeze = [0] * LED_COUNT
+def Ice(strip, Freeze, Cooling, Sparking, SpeedDelay):
+    #Step 1.  Cool down every cell a little
+    for i in range(0, LED_COUNT):
+        CoolDown = random.randint(0, (int(math.floor((Cooling * 10) / LED_COUNT)) + 2))
+        if (CoolDown > Freeze[i]):
+            Heat[i] = 0
+        else:
+            Freeze[i] = Freeze[i] - CoolDown
+    #Step 2.  Heat from each cell drifts 'up' and diffuses a little
+    for i in range((LED_COUNT - 1), 2, -1):
+        Freeze[i] = int(math.floor((Freeze[i - 1] + Freeze[i - 2] + Freeze[i - 2]) / 3))
+    #Step 3.  Randomly ignite new 'sparks' near the bottom
+    if (random.randint(0, 255) < Sparking):
+        y=random.randint(0, 7)
+        #There are 2 different ways to do this part, the commented out line is the alternate
+        Freeze[y] = Freeze[y] + random.randrange(160, 255)
+        #Added check to original code so that the heat never exceeds 255
+        if (Freeze[y]>255): Freeze[y]=255
+        #Freeze[y] = random.randrange(160, 255)
+    #Step 4.  Convert heat to LED colors
+    for i in range(0, LED_COUNT):
+        SetPixelFreezeColor(strip, i, Freeze[i])
+    #Step 5.  Display
+    strip.show()
+    time.sleep(SpeedDelay)
+
+#Used by Ice
+def SetPixelFreezeColor(strip, Pixel, Temperature):
+    #Scale 'heat' down from 0-255 to 0-191
+    t192 = int(math.floor((Temperature / 255.0) * 191))
+    #calculate ramp up from
+    FreezeRamp = t192 & 0x3F #0..63
+    FreezeRamp <<= 2 #scale up to 0..252
+    #figure out which third of the spectrum we're in:
+    if (t192 > 0x80):
+        strip.setPixelColor(Pixel, Color(FreezeRamp, 255, 255))
+    elif(t192 > 0x40):
+        strip.setPixelColor(Pixel, Color(0, FreezeRamp, 255))
+    else:
+        strip.setPixelColor(Pixel, Color(0, 0, FreezeRamp))
 
 #Used by BouncingBalls and BouncingBallsRGB
 def GetMillis():
@@ -688,7 +706,7 @@ def Clock2(strip, IncludeHours):
     if Seconds==HourPosition and Minutes==HourPosition:
         strip.setPixelColor(Seconds, Color(255, 255, 255))
     strip.show()
-    
+
 def FillDownRandom(strip, SpeedDelay, DisplayDelay, PauseDelay, FlushDelay):
     SetAll(strip, Color(0, 0, 0))
     #Fill down with random colors

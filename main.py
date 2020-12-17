@@ -27,7 +27,7 @@ def bot_loop():
             s.send("PONG :tmi.twitch.tv\r\n".encode("utf-8"))
             print("Pong")
         else:
-            username = re.search(r"\w+", response).group(0) 
+            username = re.search(r"\w+", response).group(0)
             message = CHAT_MSG.sub("", response)
             print(username + ": " + response)
 
@@ -62,7 +62,7 @@ def bot_loop():
             for pattern in config.NEO7:
                 if re.match(pattern[0], message):
                     main2.neo_loop7()
-                    
+
             for pattern in config.NEO8:
                 if re.match(pattern[0], message):
                     main2.neo_loop8()
@@ -71,25 +71,29 @@ def bot_loop():
                 if re.match(pattern[0], message):
                     main2.neo_loop9()
 
+            for pattern in config.NEO10:
+                if re.match(pattern[0], message):
+                    main2.neo_loop10()
+
             for pattern in config.MATRIX01:
                 if re.match(pattern[0], message):
-                    main2.neo_progmem_BombJack()
+                    main2.neo_progmem_run("BombJack")
 
             for pattern in config.MATRIX02:
                 if re.match(pattern[0], message):
-                    main2.neo_progmem_Qbert()
+                    main2.neo_progmem_run("Qbert")
 
             for pattern in config.MATRIX03:
                 if re.match(pattern[0], message):
-                    main2.neo_progmem_DigDug()
+                    main2.neo_progmem_run("DigDug")
 
             for pattern in config.MATRIX04:
                 if re.match(pattern[0], message):
-                    main2.neo_progmem_Link()
-            
+                    main2.neo_progmem_run("Link")
+
             for pattern in config.MATRIX05:
                 if re.match(pattern[0], message):
-                    main2.neo_progmem_Mario()
+                    main2.neo_progmem_run("Mario",5,0.2)
 
             for pattern in config.BLANK:
                 if re.match(pattern[0], message):
@@ -102,4 +106,3 @@ def bot_loop():
         time.sleep(1 / config.RATE)
 if __name__ == "__main__":
     bot_loop()
-
