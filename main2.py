@@ -181,6 +181,18 @@ def neo_progmem_Link():
     for i in range (3):
 	    CharAnimation(strip, Link)
     Blank(strip)
+	
+def neo_progmem_Mario():
+    #Process arguments
+    opt_parse()
+    #Create NeoPixel object with appropriate configuration.
+    strip = Adafruit_NeoPixel(MATRIX_COUNT, MATRIX_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, MATRIX_BRIGHTNESS, MATRIX_CHANNEL, LED_STRIP)
+    #Intialize the library (must be called once before other functions).
+    strip.begin()
+    print("Calling:  CharAnimation(Mario)")
+    for i in range (3):
+	    CharAnimation3f(strip, Mario)
+    Blank(strip)	
 
 """       
 while True:

@@ -57,6 +57,28 @@ def CharAnimation(strip, gamename):
     strip.show()
     time.sleep(0.5)
 
+def CharAnimation3f(strip, gamename):
+    firstframe = play(gamename, 0)
+    secondframe = play(gamename, 1)
+    thirdframe = play(gamename, 2)
+
+    for i in range(256):
+        strip.setPixelColorRGB(i, firstframe[i][0], firstframe[i][1], firstframe[i][2])
+    strip.show()
+    time.sleep(0.5)
+    for f in range(256):
+        strip.setPixelColorRGB(f, secondframe[f][0], secondframe[f][1], secondframe[f][2])
+    strip.show()
+    time.sleep(0.5)
+    for g in range(256):
+        strip.setPixelColorRGB(g, thirdframe[g][0], thirdframe[g][1], thirdframe[g][2])
+    strip.show()
+    time.sleep(0.5)
+    for h in range(256):
+        strip.setPixelColorRGB(h, secondframe[h][0], secondframe[h][1], secondframe[h][2])
+    strip.show()
+    time.sleep(0.5)
+
 def FadeRGB(strip):
     for i in range(0, 3):
         #Fade In.

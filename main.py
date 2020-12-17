@@ -86,6 +86,10 @@ def bot_loop():
             for pattern in config.MATRIX04:
                 if re.match(pattern[0], message):
                     main2.neo_progmem_Link()
+            
+            for pattern in config.MATRIX05:
+                if re.match(pattern[0], message):
+                    main2.neo_progmem_Mario()
 
             for pattern in config.BLANK:
                 if re.match(pattern[0], message):

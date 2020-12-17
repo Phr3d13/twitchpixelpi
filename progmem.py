@@ -412,7 +412,7 @@ DigDug = [DigDug01, DigDug02]
 Qbert = [Qbert01, Qbert02]
 BombJack = [BombJack01, BombJack02]
 Link = [Link01, Link02]
-Mario = [Mario01, Mario01, Mario03]
+Mario = [Mario01, Mario02, Mario03]
 
 # Convert to RGB values
 def convert_to_rgb(hx):

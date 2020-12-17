@@ -73,3 +73,6 @@ MATRIX03 = [
 MATRIX04 = [
     [r"!link", "led"]
 ]
+MATRIX05 = [
+    [r"!mario", "led"]
+]
