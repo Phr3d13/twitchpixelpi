@@ -1,0 +1,1 @@
+PASS = "oauth:" # your Twitch OAuth token

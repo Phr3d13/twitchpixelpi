@@ -2,6 +2,7 @@
 
 #Import the 'functions_library' which animates the LEDs in various ways.
 from function_library import *
+import time
 
 #Main program logic:
 
@@ -146,6 +147,100 @@ def neo_loop10():
     for i in range (300):
         Ice(strip, Freeze, 75, 150, .015)
     Blank(strip)
+
+def neo_loop11():
+    #Process arguments
+    opt_parse()
+    #Create NeoPixel object with appropriate configuration.
+    strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL, LED_STRIP)
+    #strip = Adafruit_NeoPixel(MATRIX_COUNT, MATRIX_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, MATRIX_CHANNEL, LED_STRIP)
+    #Intialize the library (must be called once before other functions).
+    strip.begin()
+    print("Calling:  NewKitt(strip, 255, 0, 0, 8, .01, .05)")
+    for i in range (5):
+        Cylon(strip, random.randint(0, 150), random.randint(0, 150), random.randint(0, 150), 8, .05, .05)
+    Blank(strip)
+
+def neo_loop12():
+    #Process arguments
+    opt_parse()
+    #Create NeoPixel object with appropriate configuration.
+    strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL, LED_STRIP)
+    #strip = Adafruit_NeoPixel(MATRIX_COUNT, MATRIX_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, MATRIX_CHANNEL, LED_STRIP)
+	#Intialize the library (must be called once before other functions).
+    strip.begin()
+    print("Calling:  Ice(strip, Freeze, 75, 150, .015) #This looks a lot better looped...")
+    for i in range (300):
+        Safe(strip, Herb, 75, 150, .015)
+    Blank(strip)
+
+def neo_loop13():
+    #Process arguments
+    opt_parse()
+    #Create NeoPixel object with appropriate configuration.
+    strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL, LED_STRIP)
+    #strip = Adafruit_NeoPixel(MATRIX_COUNT, MATRIX_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, MATRIX_CHANNEL, LED_STRIP)
+	#Intialize the library (must be called once before other functions).
+    strip.begin()
+    print("Calling:  Sparkle(strip, red, green, blue, SpeedDelay) #This looks a lot better looped...")
+    for i in range (300):
+        Sparkle(strip, 127, 0, 150, .015)
+    Blank(strip)
+
+def neo_loop14():
+    #Process arguments
+    opt_parse()
+    #Create NeoPixel object with appropriate configuration.
+    strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL, LED_STRIP)
+    #strip = Adafruit_NeoPixel(MATRIX_COUNT, MATRIX_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, MATRIX_CHANNEL, LED_STRIP)
+	#Intialize the library (must be called once before other functions).
+    strip.begin()
+    print("Calling:  Sparkle(strip, red, green, blue, SpeedDelay) #This looks a lot better looped...")
+    for i in range (300):
+        Sparkle(strip, 127, 127, 0, .015)
+    Blank(strip)
+
+def neo_loop15():
+    #Process arguments
+    opt_parse()
+    #Create NeoPixel object with appropriate configuration.
+    strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL, LED_STRIP)
+    #strip = Adafruit_NeoPixel(MATRIX_COUNT, MATRIX_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, MATRIX_CHANNEL, LED_STRIP)
+	#Intialize the library (must be called once before other functions).
+    strip.begin()
+    print("Calling:  Rainbow(strip, SpeedDelay) ")
+    #for i in range (200):
+    Rainbow(strip, 5)
+    Blank(strip)
+
+def neo_loop16():
+    #Process arguments
+    opt_parse()
+    #Create NeoPixel object with appropriate configuration.
+    strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL, LED_STRIP)
+    #strip = Adafruit_NeoPixel(MATRIX_COUNT, MATRIX_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, MATRIX_CHANNEL, LED_STRIP)
+	#Intialize the library (must be called once before other functions).
+    strip.begin()
+    print("Calling:  FadeInOut(strip, red, green, blue) #This looks a lot better looped...")
+    for i in range (10):
+        FadeInOut(strip, 0, 255, 0)
+    Blank(strip)
+
+def neo_loop17():
+    #Process arguments
+    opt_parse()
+    #Create NeoPixel object with appropriate configuration.
+    strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL, LED_STRIP)
+    #strip = Adafruit_NeoPixel(MATRIX_COUNT, MATRIX_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, MATRIX_CHANNEL, LED_STRIP)
+	#Intialize the library (must be called once before other functions).
+    strip.begin()
+    print("Calling:  Rainbow(strip, Iterations, SpeedDelay) ")
+    for i in range (6):    
+        Heartbeat(strip, 255, 0, 0, 0.0001, 0.0001)
+        Heartbeat(strip, 255, 0, 0, 0.0001, 0.0001)
+        time.sleep(0.2)
+    Blank(strip)
+
 
 def neo_progmem_run(GameName, loops=3, sleep=0.5):
     #Process arguments
