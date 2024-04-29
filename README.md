@@ -35,8 +35,7 @@ CHAN is the Twitch streamer account you want the bot to read and respond to (aga
 ```
 PASS = "your_oauthtoken" # your Twitch OAuth token
 ```
-PASS is the oauth token for the twitch account the bot would be using. Sign into a web browser with the bot's account,  
-and go here: https://twitchapps.com/tmi/ you need the whole oauth including the "oauth:"
+PASS is the oauth token for the twitch account the bot would be using. Sign into a web browser with the bot's account, and go here: https://twitchapps.com/tmi/ you need the whole oauth including the "oauth:"
 
 To run the bot:
 ```
