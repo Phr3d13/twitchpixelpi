@@ -24,14 +24,14 @@ def opt_parse():
 
 #LED strip configuration:
 MATRIX_COUNT   = 256      # Number of LED pixels.
-LED_COUNT      = 32      # Number of LED pixels.
+LED_COUNT      = 150      # Number of LED pixels.
 MATRIX_PIN     = 13      # GPIO pin connected to the pixels (18 uses PWM!).
 LED_PIN        = 12      # GPIO pin connected to the pixels (18 uses PWM!).
 #LED_PIN        = 10      # GPIO pin connected to the pixels (10 uses SPI /dev/spidev0.0).
 LED_FREQ_HZ    = 800000  # LED signal frequency in hertz (usually 800khz)
 LED_DMA        = 10      # DMA channel to use for generating signal (try 10)
-LED_BRIGHTNESS = 255     # Set to 0 for darkest and 255 for brightest
-MATRIX_BRIGHTNESS = 64     # Set to 0 for darkest and 255 for brightest
+LED_BRIGHTNESS = 90     # Set to 0 for darkest and 255 for brightest
+MATRIX_BRIGHTNESS = 32     # Set to 0 for darkest and 255 for brightest
 LED_INVERT     = False   # True to invert the signal (when using NPN transistor level shift)
 LED_CHANNEL    = 0       # set to '1' for GPIOs 13, 19, 41, 45 or 53
 MATRIX_CHANNEL = 1       # set to '1' for GPIOs 13, 19, 41, 45 or 53
@@ -91,6 +91,23 @@ def FadeInOut(strip, red, green, blue):
         SetAll(strip, Color(r, g, b))
         strip.show()
 
+def Heartbeat(strip, red, green, blue, fade_in_speed=0.02, fade_out_speed=0.02):
+    #Fade In.
+    for i in range (0, 256):
+        r = int(math.floor((i / 256.0) * red))
+        g = int(math.floor((i / 256.0) * green))
+        b = int(math.floor((i / 256.0) * blue))
+        SetAll(strip, Color(r, g, b))
+        strip.show()
+        time.sleep(fade_in_speed) # Adjust the sleep time for the desired speed of the heartbeat.
+    #Fade Out.
+    for i in range (256, 0, -1):
+        r = int(math.floor((i / 256.0) * red))
+        g = int(math.floor((i / 256.0) * green))
+        b = int(math.floor((i / 256.0) * blue))
+        SetAll(strip, Color(r, g, b))
+        strip.show()
+        time.sleep(fade_out_speed) # Adjust the sleep time for the desired speed of the heartbeat.
 def Strobe(strip, red, green, blue, StrobeCount, FlashDelay, EndPause):
     for i in range (0, StrobeCount):
         SetAll(strip, Color(red, green, blue))
@@ -201,12 +218,23 @@ def Wheel(WheelPosition):
 		WheelPosition -= 170
 		return Color(0, WheelPosition * 3, 255 - WheelPosition * 3)
 
-def Rainbow(strip, SpeedDelay):
-    for i in range(0, 256):
-        for j in range(0, LED_COUNT):
-            strip.setPixelColor(j, Wheel((j + i) & 255))
-    strip.show()
-    time.sleep(SpeedDelay)
+#def Rainbow(strip, SpeedDelay):
+#    for i in range(0, 256):
+#        #print("I = ",i) 
+#        for j in range(0, LED_COUNT):
+#            #print("J = ",j) 
+#            strip.setPixelColor(j, Wheel((j + i) & 255))
+#        strip.show()
+#        #print("Speed Delay = ",SpeedDelay, "I = ",i, "J = ",j)
+#        time.sleep(SpeedDelay)
+
+def Rainbow(strip, wait_ms=20, iterations=1):
+    """Draw rainbow that fades across all pixels at once."""
+    for j in range(256 * iterations):
+        for i in range(strip.numPixels()):
+            strip.setPixelColor(i, Wheel((i + j) & 255))
+        strip.show()
+        time.sleep(wait_ms / 1000.0)
 
 def RainbowCycle(strip, Iterations, SpeedDelay):
     for i in range (0, 256 * Iterations):
@@ -217,6 +245,27 @@ def RainbowCycle(strip, Iterations, SpeedDelay):
     SetAll(strip, Color(0, 0, 0))
     strip.show()
 
+def RainbowCycleSlide(strip, Iterations, SpeedDelay):
+    # Initialize a circular buffer to store the color values of each LED
+    buffer = [Color(0, 0, 0)] * LED_COUNT
+    
+    for i in range (0, 256 * Iterations):
+        # Shift the circular buffer by one position
+        buffer.insert(0, buffer.pop())
+        
+        # Set the color of each LED in the strip using the values in the circular buffer
+        for j in range (0, LED_COUNT):
+            strip.setPixelColor(j, buffer[j])
+        
+        # Update the LED strip
+        strip.show()
+        
+        # Introduce a delay between iterations
+        time.sleep(SpeedDelay)
+    
+    # Turn off all LEDs
+    SetAll(strip, Color(0, 0, 0))
+    strip.show()                                                      
 def ColorChase(strip, red, green, blue, SpeedDelay):
 	for i in range(LED_COUNT):
 		strip.setPixelColor(i, Color(red, green, blue))
@@ -441,6 +490,49 @@ def SetPixelFreezeColor(strip, Pixel, Temperature):
         strip.setPixelColor(Pixel, Color(0, FreezeRamp, 255))
     else:
         strip.setPixelColor(Pixel, Color(0, 0, FreezeRamp))
+
+#The Herb array needs to be declaired globally.  You can put it in the main section (but not in the While loop), but not in the Safe function...
+Herb = [0] * LED_COUNT
+def Safe(strip, Herb, Cooling, Sparking, SpeedDelay):
+    #Step 1.  Cool down every cell a little
+    for i in range(0, LED_COUNT):
+        CoolDown = random.randint(0, (int(math.floor((Cooling * 10) / LED_COUNT)) + 2))
+        if (CoolDown > Herb[i]):
+            Heat[i] = 0
+        else:
+            Herb[i] = Herb[i] - CoolDown
+    #Step 2.  Heat from each cell drifts 'up' and diffuses a little
+    for i in range((LED_COUNT - 1), 2, -1):
+        Herb[i] = int(math.floor((Herb[i - 1] + Herb[i - 2] + Herb[i - 2]) / 3))
+    #Step 3.  Randomly ignite new 'sparks' near the bottom
+    if (random.randint(0, 255) < Sparking):
+        y=random.randint(0, 7)
+        #There are 2 different ways to do this part, the commented out line is the alternate
+        Herb[y] = Herb[y] + random.randrange(160, 255)
+        #Added check to original code so that the heat never exceeds 255
+        if (Herb[y]>255): Herb[y]=255
+        #Herb[y] = random.randrange(160, 255)
+    #Step 4.  Convert heat to LED colors
+    for i in range(0, LED_COUNT):
+        SetPixelHerbColor(strip, i, Herb[i])
+    #Step 5.  Display
+    strip.show()
+    time.sleep(SpeedDelay)
+
+#Used by Safe
+def SetPixelHerbColor(strip, Pixel, Temperature):
+    #Scale 'heat' down from 0-255 to 0-191
+    t192 = int(math.floor((Temperature / 255.0) * 191))
+    #calculate ramp up from
+    HerbRamp = t192 & 0x3F #0..63
+    HerbRamp <<= 2 #scale up to 0..252
+    #figure out which third of the spectrum we're in:
+    if (t192 > 0x80):
+        strip.setPixelColor(Pixel, Color(0, HerbRamp, 255))
+    elif(t192 > 0x40):
+        strip.setPixelColor(Pixel, Color(0, HerbRamp, 128))
+    else:
+        strip.setPixelColor(Pixel, Color(0, HerbRamp, 0))
 
 #Used by BouncingBalls and BouncingBallsRGB
 def GetMillis():
