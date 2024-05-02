@@ -110,3 +110,12 @@ MATRIX05 = [
 MATRIX06 = [
     [r"!kirby", "led"]
 ]
+MATRIX07 = [
+    [r"!frog", "led"]
+]
+MATRIX08 = [
+    [r"!vinyl", "led"]
+]
+MATRIX09 = [
+    [r"!heartbeat", "led"]
+]

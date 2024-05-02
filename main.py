@@ -143,6 +143,18 @@ def bot_loop():
                 for pattern in config.MATRIX06:
                     if re.match(pattern[0], message):
                         main2.neo_progmem_run("Kirby",5,0.1)
+                        
+                for pattern in config.MATRIX07:
+                    if re.match(pattern[0], message):
+                        main2.neo_progmem_run("Frog",5,0.1)
+                        
+                for pattern in config.MATRIX08:
+                    if re.match(pattern[0], message):
+                        main2.neo_progmem_run("Vinyl",5,0.1)
+                        
+                for pattern in config.MATRIX09:
+                    if re.match(pattern[0], message):
+                        main2.neo_progmem_run("Heartbeat",5,0.1)
 
                 for pattern in config.BLANK:
                     if re.match(pattern[0], message):
