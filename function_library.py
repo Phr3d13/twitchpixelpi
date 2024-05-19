@@ -3,7 +3,7 @@
 import time
 import math
 import random
-from neopixellib2 import *
+from rpi_ws281x import *
 from array import *
 from progmem import *
 import argparse
