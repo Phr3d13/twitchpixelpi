@@ -234,7 +234,7 @@ def neo_loop17():
     #strip = Adafruit_NeoPixel(MATRIX_COUNT, MATRIX_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, MATRIX_CHANNEL, LED_STRIP)
 	#Intialize the library (must be called once before other functions).
     strip.begin()
-    print("Calling:  Rainbow(strip, Iterations, SpeedDelay) ")
+    print("Calling:  Heartbeat(strip, red, green, blue, fade_in_speed, fade_out_speed) ")
     for i in range (6):    
         Heartbeat(strip, 255, 0, 0, 0.0001, 0.0001)
         Heartbeat(strip, 255, 0, 0, 0.0001, 0.0001)
