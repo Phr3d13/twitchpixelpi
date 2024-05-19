@@ -4,6 +4,7 @@ import utility
 import socket
 import time
 import re
+import concurrent.futures
 import main2
 from secrets import secrets
 from function_library import *
@@ -40,6 +41,7 @@ def bot_loop():
                 print(str(e))
                 response = ""
                 continue
+            functions_to_run = []
             if response == "PING :tmi.twitch.tv\r\n":
                 irc.sock.send("PONG :tmi.twitch.tv\r\n".encode("utf-8"))
                 print("Pong")
@@ -54,116 +56,128 @@ def bot_loop():
 
                 for pattern in config.NEO:
                     if re.match(pattern[0], message):
-                        main2.neo_loop1()
+                        functions_to_run.append(main2.neo_loop1)
 
                 for pattern in config.NEO2:
                     if re.match(pattern[0], message):
-                        main2.neo_loop2()
+                        functions_to_run.append(main2.neo_loop2)
 
                 for pattern in config.NEO3:
                     if re.match(pattern[0], message):
-                        main2.neo_loop3()
+                        functions_to_run.append(main2.neo_loop3)
 
                 for pattern in config.NEO4:
                     if re.match(pattern[0], message):
-                        main2.neo_loop4()
+                        functions_to_run.append(main2.neo_loop4)
 
                 for pattern in config.NEO5:
                     if re.match(pattern[0], message):
-                        main2.neo_loop5()
+                        functions_to_run.append(main2.neo_loop5)
 
                 for pattern in config.NEO6:
                     if re.match(pattern[0], message):
-                        main2.neo_loop6()
+                        functions_to_run.append(main2.neo_loop6)
 
                 for pattern in config.NEO7:
                     if re.match(pattern[0], message):
-                        main2.neo_loop7()
+                        functions_to_run.append(main2.neo_loop7)
 
                 for pattern in config.NEO8:
                     if re.match(pattern[0], message):
-                        main2.neo_loop8()
+                        functions_to_run.append(main2.neo_loop8)
 
                 for pattern in config.NEO9:
                     if re.match(pattern[0], message):
-                        main2.neo_loop9()
+                        functions_to_run.append(main2.neo_loop9)
 
                 for pattern in config.NEO10:
                     if re.match(pattern[0], message):
-                        main2.neo_loop10()
+                        functions_to_run.append(main2.neo_loop10)
 
                 for pattern in config.NEO11:
                     if re.match(pattern[0], message):
-                        main2.neo_loop11()
+                        functions_to_run.append(main2.neo_loop11)
 
                 for pattern in config.NEO12:
                     if re.match(pattern[0], message):
-                        main2.neo_loop12()
+                        functions_to_run.append(main2.neo_loop12)
 
                 for pattern in config.NEO13:
                     if re.match(pattern[0], message):
-                        main2.neo_loop13()
+                        functions_to_run.append(main2.neo_loop13)
 
                 for pattern in config.NEO14:
                     if re.match(pattern[0], message):
-                        main2.neo_loop14()
+                        functions_to_run.append(main2.neo_loop14)
 
                 for pattern in config.NEO15:
                     if re.match(pattern[0], message):
-                        main2.neo_loop15()
+                        functions_to_run.append(main2.neo_loop15)
 
                 for pattern in config.NEO16:
                     if re.match(pattern[0], message):
-                        main2.neo_loop16()
+                        functions_to_run.append(main2.neo_loop16)
 
                 for pattern in config.NEO17:
                     if re.match(pattern[0], message):
-                        main2.neo_loop17()
+                        functions_to_run.append(main2.neo_loop17)
 
                 for pattern in config.MATRIX01:
                     if re.match(pattern[0], message):
-                        main2.neo_progmem_run("BombJack")
+                        functions_to_run.append(main2.neo_progmem_run("BombJack"))
 
                 for pattern in config.MATRIX02:
                     if re.match(pattern[0], message):
-                        main2.neo_progmem_run("Qbert")
+                        functions_to_run.append(main2.neo_progmem_run("Qbert"))
 
                 for pattern in config.MATRIX03:
                     if re.match(pattern[0], message):
-                        main2.neo_progmem_run("DigDug")
+                        functions_to_run.append(main2.neo_progmem_run("DigDug"))
 
                 for pattern in config.MATRIX04:
                     if re.match(pattern[0], message):
-                        main2.neo_progmem_run("Link",5,0.2)
+                        functions_to_run.append(main2.neo_progmem_run("Link",5,0.2))
 
                 for pattern in config.MATRIX05:
                     if re.match(pattern[0], message):
-                        main2.neo_progmem_run("Mario",20,0.1)
+                        functions_to_run.append(main2.neo_progmem_run("Mario",20,0.1))
 
                 for pattern in config.MATRIX06:
                     if re.match(pattern[0], message):
-                        main2.neo_progmem_run("Kirby",5,0.1)
+                        functions_to_run.append(main2.neo_progmem_run("Kirby",5,0.1))
                         
                 for pattern in config.MATRIX07:
                     if re.match(pattern[0], message):
-                        main2.neo_progmem_run("Frog",5,0.1)
+                        functions_to_run.append(main2.neo_progmem_run("Frog",5,0.1))
                         
                 for pattern in config.MATRIX08:
                     if re.match(pattern[0], message):
-                        main2.neo_progmem_run("Vinyl",5,0.1)
+                        functions_to_run.append(main2.neo_progmem_run("Vinyl",5,0.1))
                         
                 for pattern in config.MATRIX09:
                     if re.match(pattern[0], message):
-                        main2.neo_progmem_run("Heartbeat",5,0.1)
+                        functions_to_run.append(main2.neo_progmem_run("Heartbeat",5,0.1))
+
+                for pattern in config.MATRIX10:
+                    if re.match(pattern[0], message):
+                        functions_to_run.append(main2.neo_progmem_run("Poo",5,0.1))
+                        
+                for pattern in config.MATRIX11:
+                    if re.match(pattern[0], message):
+                        functions_to_run.append(main2.neo_progmem_run("FireMush",10,0.1)  )                      
 
                 for pattern in config.BLANK:
                     if re.match(pattern[0], message):
-                        main2.blank()
+                        functions_to_run.append(main2.blank)
 
                 for pattern in config.BAN_PAT:
                     if re.match(pattern, message):
                         utility.ban(s, username)
                         break
+                with concurrent.futures.ProcessPoolExecutor(max_workers=5) as executor:
+                    # Start the load operations and mark each future with its URL
+                    for pattern in functions_to_run: 
+                        executor.submit(pattern)
         time.sleep(1 / config.RATE)
 if __name__ == "__main__":
     bot_loop()
