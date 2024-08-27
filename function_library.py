@@ -326,17 +326,17 @@ def FadeToBlack(strip, Position, FadeValue):
     g = (OldColor & 0x0000ff00) >> 8
     b = (OldColor & 0x000000ff)
     if (r<=10):
-        r = 0;
+        r = 0
     else:
-        r = r - (r * FadeValue / 256)
+        r = int(r - (r * FadeValue / 256))
     if (g<=10):
-        g = 0;
+        g = 0
     else:
-        g = g - (g * FadeValue / 256)
+        g = int(g - (g * FadeValue / 256))
     if (b<=10):
-        b = 0;
+        b = 0
     else:
-        b = b - (b * FadeValue / 256)
+        b = int(b - (b * FadeValue / 256))
     strip.setPixelColor(Position, Color(r, g, b))
 
 def NewKitt(strip, red, green, blue, EyeSize, SpeedDelay, ReturnDelay):
@@ -824,13 +824,13 @@ def FillDownRandom(strip, SpeedDelay, DisplayDelay, PauseDelay, FlushDelay):
         time.sleep(FlushDelay)
     time.sleep(PauseDelay)
 
-def RandomColors(strip, SpeedDelay):
+def RandomColors(strip, SpeedDelay, iterations=10):
     SetAll(strip, Color(0, 0, 0))
-    while True:
+    for _ in range(iterations):
         for i in range(0, LED_COUNT):
-            r=random.randint(0, 255)
-            g=random.randint(0, 255)
-            b=random.randint(0, 255)
+            r = random.randint(0, 255)
+            g = random.randint(0, 255)
+            b = random.randint(0, 255)
             strip.setPixelColor(i, Color(r, g, b))
         strip.show()
         time.sleep(SpeedDelay)

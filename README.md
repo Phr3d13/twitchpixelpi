@@ -79,3 +79,11 @@ To make the service start at boot:
 ```
 sudo systemctl enable twitchbot
 ```
+
+## Running Tests
+
+To run the test suite, use the following command from the project root directory:
+
+```bash
+python3 -m unittest discover -v -s tests
+```
