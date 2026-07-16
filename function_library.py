@@ -3,7 +3,8 @@
 import time
 import math
 import random
-from rpi_ws281x import *
+import colorsys
+from neopixellib2 import *
 from array import *
 from progmem import *
 import argparse
@@ -25,16 +26,16 @@ def opt_parse():
 #LED strip configuration:
 MATRIX_COUNT   = 256      # Number of LED pixels.
 LED_COUNT      = 32      # Number of LED pixels.
-MATRIX_PIN     = 13      # GPIO pin connected to the pixels (18 uses PWM!).
-LED_PIN        = 12      # GPIO pin connected to the pixels (18 uses PWM!).
+MATRIX_PIN     = 18      # GPIO pin connected to the pixels (18 uses PWM!).
+LED_PIN        = 13      # GPIO pin connected to the pixels (18 uses PWM!).
 #LED_PIN        = 10      # GPIO pin connected to the pixels (10 uses SPI /dev/spidev0.0).
 LED_FREQ_HZ    = 800000  # LED signal frequency in hertz (usually 800khz)
 LED_DMA        = 10      # DMA channel to use for generating signal (try 10)
 LED_BRIGHTNESS = 127     # Set to 0 for darkest and 255 for brightest
-MATRIX_BRIGHTNESS = 10     # Set to 0 for darkest and 255 for brightest
+MATRIX_BRIGHTNESS = 8     # Set to 0 for darkest and 255 for brightest
 LED_INVERT     = False   # True to invert the signal (when using NPN transistor level shift)
 LED_CHANNEL    = 0       # set to '1' for GPIOs 13, 19, 41, 45 or 53
-MATRIX_CHANNEL = 1       # set to '1' for GPIOs 13, 19, 41, 45 or 53
+MATRIX_CHANNEL = 0       # set to '1' for GPIOs 13, 19, 41, 45 or 53
 LED_STRIP      = ws.WS2811_STRIP_GRB   # Strip type and colour ordering
 
 #Define functions which animate LEDs in various ways.
@@ -153,7 +154,9 @@ def Twinkle(strip, red, green, blue, Count, SpeedDelay, OnlyOne):
 def TwinkleRandom(strip, Count, SpeedDelay, OnlyOne):
     SetAll(strip, Color(0, 0, 0))
     for i in range (0, Count):
-        strip.setPixelColor(random.randrange(0, LED_COUNT), Color(random.randrange(0, 256), random.randrange(0, 256), random.randrange(0, 256)))
+        hue = random.random()
+        r, g, b = [int(c * 255) for c in colorsys.hsv_to_rgb(hue, 1.0, 1.0)]
+        strip.setPixelColor(random.randrange(0, LED_COUNT), Color(r, g, b))
         strip.show()
         time.sleep(SpeedDelay)
         if OnlyOne:
@@ -498,7 +501,7 @@ def Safe(strip, Herb, Cooling, Sparking, SpeedDelay):
     for i in range(0, LED_COUNT):
         CoolDown = random.randint(0, (int(math.floor((Cooling * 10) / LED_COUNT)) + 2))
         if (CoolDown > Herb[i]):
-            Heat[i] = 0
+            Herb[i] = 0
         else:
             Herb[i] = Herb[i] - CoolDown
     #Step 2.  Heat from each cell drifts 'up' and diffuses a little
@@ -803,9 +806,8 @@ def FillDownRandom(strip, SpeedDelay, DisplayDelay, PauseDelay, FlushDelay):
     SetAll(strip, Color(0, 0, 0))
     #Fill down with random colors
     for i in range(0, LED_COUNT):
-        r=random.randint(0, 255)
-        g=random.randint(0, 255)
-        b=random.randint(0, 255)
+        hue = random.random()
+        r, g, b = [int(c * 255) for c in colorsys.hsv_to_rgb(hue, 1.0, 1.0)]
         for j in range(0,LED_COUNT-i):
             strip.setPixelColor(j, Color(r, g, b))
             if j>0:
@@ -828,9 +830,8 @@ def RandomColors(strip, SpeedDelay):
     SetAll(strip, Color(0, 0, 0))
     while True:
         for i in range(0, LED_COUNT):
-            r=random.randint(0, 255)
-            g=random.randint(0, 255)
-            b=random.randint(0, 255)
+            hue = random.random()
+            r, g, b = [int(c * 255) for c in colorsys.hsv_to_rgb(hue, 1.0, 1.0)]
             strip.setPixelColor(i, Color(r, g, b))
         strip.show()
         time.sleep(SpeedDelay)
@@ -840,14 +841,98 @@ def Blank(strip):
     strip.show()
 
 def Cops(strip, StrobeCount, FlashDelay, EndPause):
-    for i in range (0, StrobeCount):
-        SetAll(strip, Color(0, 0, 64))
+    num = strip.numPixels()
+    mid = num // 2
+    red = Color(255, 0, 0)
+    blue = Color(0, 0, 255)
+    white = Color(255, 255, 255)
+    off = Color(0, 0, 0)
+    t = FlashDelay  # base time unit
+
+    def set_range(start, end, color):
+        for i in range(start, end):
+            strip.setPixelColor(i, color)
+
+    def white_blip():
+        """Quick full-strip white flash like a takedown light."""
+        SetAll(strip, white)
         strip.show()
-        time.sleep(FlashDelay)
-        SetAll(strip, Color(64, 0, 0))
+        time.sleep(t / 20)
+        SetAll(strip, off)
         strip.show()
-        time.sleep(FlashDelay)
-#    time.sleep(EndPause)
+        time.sleep(t / 20)
+
+    for _ in range(StrobeCount):
+        # Phase 1: Red side — 3 rapid strobes
+        for _ in range(3):
+            set_range(0, mid, red)
+            set_range(mid, num, off)
+            strip.show()
+            time.sleep(t / 8)
+            SetAll(strip, off)
+            strip.show()
+            time.sleep(t / 12)
+
+        # White blip between phases
+        white_blip()
+
+        # Phase 2: Blue side — 2 rapid strobes (different count = different feel)
+        for _ in range(2):
+            set_range(0, mid, off)
+            set_range(mid, num, blue)
+            strip.show()
+            time.sleep(t / 6)
+            SetAll(strip, off)
+            strip.show()
+            time.sleep(t / 10)
+
+        # Phase 3: Quick alternating red/blue
+        set_range(0, mid, red)
+        set_range(mid, num, off)
+        strip.show()
+        time.sleep(t / 10)
+        set_range(0, mid, off)
+        set_range(mid, num, blue)
+        strip.show()
+        time.sleep(t / 10)
+
+        # White blip
+        white_blip()
+
+        # Phase 4: Blue side — 3 strobes (longer on-time)
+        for _ in range(3):
+            set_range(0, mid, off)
+            set_range(mid, num, blue)
+            strip.show()
+            time.sleep(t / 7)
+            SetAll(strip, off)
+            strip.show()
+            time.sleep(t / 14)
+
+        # Phase 5: Red side — 2 quick strobes
+        for _ in range(2):
+            set_range(0, mid, red)
+            set_range(mid, num, off)
+            strip.show()
+            time.sleep(t / 9)
+            SetAll(strip, off)
+            strip.show()
+            time.sleep(t / 12)
+
+        # Both sides flash together + white blip
+        set_range(0, mid, red)
+        set_range(mid, num, blue)
+        strip.show()
+        time.sleep(t / 5)
+        white_blip()
+
+        # Brief dark gap before next cycle
+        SetAll(strip, off)
+        strip.show()
+        time.sleep(t / 8)
+
+    SetAll(strip, off)
+    strip.show()
 """
 Done
 """

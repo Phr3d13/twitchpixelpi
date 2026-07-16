@@ -3,6 +3,7 @@
 #Import the 'functions_library' which animates the LEDs in various ways.
 from function_library import *
 import time
+import colorsys
 
 #Main program logic:
 
@@ -28,7 +29,9 @@ def neo_loop1():
     strip.begin()
     print("Calling:  Cylon(strip, 255, 0, 0, 3, .1, .5)")
     for i in range (5):
-        Cylon(strip, (random.randrange(0, 255)), (random.randrange(0, 255)), (random.randrange(0, 255)), 7, .05, .01)
+        hue = random.random()
+        r, g, b = [int(c * 255) for c in colorsys.hsv_to_rgb(hue, 1.0, 1.0)]
+        Cylon(strip, r, g, b, 7, .05, .01)
 
 def neo_loop2():
     #Process arguments
@@ -72,7 +75,10 @@ def neo_loop4():
     #Intialize the library (must be called once before other functions).
     strip.begin()
     print("Calling:  RunningLights(strip, 255, 255, 255, .25)")
-    RunningLights(strip, (random.randrange(0, 125, 15)), (random.randrange(0, 125, 15)), (random.randrange(0, 125, 15)), .1)
+    # Pick a vivid random color using HSV with full saturation
+    hue = random.random()
+    r, g, b = [int(c * 255) for c in colorsys.hsv_to_rgb(hue, 1.0, 1.0)]
+    RunningLights(strip, r, g, b, .1)
     Blank(strip)
 
 def neo_loop5():
@@ -132,7 +138,9 @@ def neo_loop9():
     #Intialize the library (must be called once before other functions).
     strip.begin()
     print("Calling:  NewKitt(strip, 255, 0, 0, 8, .01, .05)")
-    NewKitt(strip, random.randint(0, 150), random.randint(0, 150), random.randint(0, 150), 8, .1, .1)
+    hue = random.random()
+    r, g, b = [int(c * 255) for c in colorsys.hsv_to_rgb(hue, 1.0, 1.0)]
+    NewKitt(strip, r, g, b, 8, .1, .1)
     Blank(strip)
 
 def neo_loop10():
@@ -158,7 +166,9 @@ def neo_loop11():
     strip.begin()
     print("Calling:  NewKitt(strip, 255, 0, 0, 8, .01, .05)")
     for i in range (5):
-        Cylon(strip, random.randint(0, 150), random.randint(0, 150), random.randint(0, 150), 8, .05, .05)
+        hue = random.random()
+        r, g, b = [int(c * 255) for c in colorsys.hsv_to_rgb(hue, 1.0, 1.0)]
+        Cylon(strip, r, g, b, 8, .05, .05)
     Blank(strip)
 
 def neo_loop12():
@@ -234,7 +244,7 @@ def neo_loop17():
     #strip = Adafruit_NeoPixel(MATRIX_COUNT, MATRIX_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, MATRIX_CHANNEL, LED_STRIP)
 	#Intialize the library (must be called once before other functions).
     strip.begin()
-    print("Calling:  Heartbeat(strip, red, green, blue, fade_in_speed, fade_out_speed) ")
+    print("Calling:  Rainbow(strip, Iterations, SpeedDelay) ")
     for i in range (6):    
         Heartbeat(strip, 255, 0, 0, 0.0001, 0.0001)
         Heartbeat(strip, 255, 0, 0, 0.0001, 0.0001)

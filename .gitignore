@@ -1,2 +1,5 @@
 secrets/
 secrets.py
+.venv/
+.vscode/
+__pycache__/

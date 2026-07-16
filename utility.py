@@ -1,14 +1,15 @@
 import config
 import socket
 
-def chat(sock, msg):
+def chat(sock, channel, msg):
 	"""
 	Send a chat message to the server.
 	Keyword arguments:
-	sock -- the socket over which to send the message
-	msg  -- the message to be sent
+	sock    -- the socket over which to send the message
+	channel -- the channel to send the message to
+	msg     -- the message to be sent
 	"""
-	sock.send(("PRIVMSG {} :{}\r\n".format(config.CHAN, msg)).encode("UTF-8"))
+	sock.send(("PRIVMSG {} :{}\r\n".format(channel, msg)).encode("UTF-8"))
 
 def ban(sock, user):
 	"""

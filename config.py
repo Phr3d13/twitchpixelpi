@@ -125,3 +125,9 @@ MATRIX10 = [
 MATRIX11 = [
     [r"!mush", "led"]
 ]
+MATRIX12 = [
+    [r"!safe", "led"]
+]
+MATRIX13 = [
+    [r"!note", "led"]
+]

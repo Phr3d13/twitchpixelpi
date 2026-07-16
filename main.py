@@ -13,6 +13,7 @@ CHAT_MSG = re.compile(r"^:\w+!\w+@\w+\.tmi\.twitch\.tv PRIVMSG #\w+ :")
 
 class IRCConn:
     def __init__(self, channel):
+        self.channel = channel
         try:
             self.sock = socket.socket()
             self.sock.settimeout(1.5) 
@@ -52,7 +53,7 @@ def bot_loop():
 
                 for pattern in config.COMMANDS:
                     if re.match(pattern[0], message):
-                        utility.chat(s, pattern[1])
+                        utility.chat(irc.sock, irc.channel, pattern[1])
 
                 for pattern in config.NEO:
                     if re.match(pattern[0], message):
@@ -165,6 +166,14 @@ def bot_loop():
                 for pattern in config.MATRIX11:
                     if re.match(pattern[0], message):
                         functions_to_run.append(main2.neo_progmem_run("FireMush",10,0.1)  )                      
+
+                for pattern in config.MATRIX12:
+                    if re.match(pattern[0], message):
+                        functions_to_run.append(main2.neo_progmem_run("Safe",5,0.1))
+
+                for pattern in config.MATRIX13:
+                    if re.match(pattern[0], message):
+                        functions_to_run.append(main2.neo_progmem_run("MusicNote",6,0.1))
 
                 for pattern in config.BLANK:
                     if re.match(pattern[0], message):
